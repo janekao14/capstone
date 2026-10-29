@@ -3,8 +3,8 @@
 ## Document control
 
 - **Dataset name:** BBO Capstone Query History
-- **Version:** 1.0
-- **Status date:** 1 October 2026
+- **Version:** 1.4
+- **Status date:** 29 October 2026
 - **Maintainer:** Jane Kao
 - **Scope:** Initial observations and iterative queries for eight synthetic black-box functions
 
@@ -28,17 +28,17 @@ All functions are treated as maximisation problems. Functions 3 and 6 return neg
 
 ### Function-level composition
 
-| Function | Dimensions | Initial evaluated records | Week 1–9 evaluated records | Total evaluated through Week 9 | Week 10 status |
+| Function | Dimensions | Initial evaluated records | Week 1–13 evaluated records | Final evaluated total | Status |
 |---|---:|---:|---:|---:|---|
-| 1 | 2 | 10 | 9 | 19 | Query recorded; output pending |
-| 2 | 2 | 10 | 9 | 19 | Query recorded; output pending |
-| 3 | 3 | 15 | 9 | 24 | Query recorded; output pending |
-| 4 | 4 | 30 | 9 | 39 | Query recorded; output pending |
-| 5 | 4 | 20 | 9 | 29 | Query recorded; output pending |
-| 6 | 5 | 20 | 9 | 29 | Query recorded; output pending |
-| 7 | 6 | 30 | 9 | 39 | Query recorded; output pending |
-| 8 | 8 | 40 | 9 | 49 | Query recorded; output pending |
-| **Total** | — | **175** | **72** | **247** | **8 pending queries** |
+| 1 | 2 | 10 | 13 | 23 | Complete |
+| 2 | 2 | 10 | 13 | 23 | Complete |
+| 3 | 3 | 15 | 13 | 28 | Complete |
+| 4 | 4 | 30 | 13 | 43 | Complete |
+| 5 | 4 | 20 | 13 | 33 | Complete |
+| 6 | 5 | 20 | 13 | 33 | Complete |
+| 7 | 6 | 30 | 13 | 43 | Complete |
+| 8 | 8 | 40 | 13 | 53 | Complete |
+| **Total** | — | **175** | **104** | **279** | **Complete** |
 
 Initial inputs and outputs are stored as NumPy `.npy` arrays using `float64`. The input shapes are `(n, d)`, where `d` is the function dimension; output shapes are `(n,)`. Weekly history is documented in Markdown. Portal submissions use six-decimal, hyphen-separated coordinates bounded by `0.000000` and `0.999999`.
 
@@ -46,13 +46,13 @@ Initial inputs and outputs are stored as NumPy `.npy` arrays using `float64`. Th
 
 - The functions’ analytical definitions, gradients and true global optima are unavailable.
 - Observation-noise distributions are not supplied.
-- Week 10 outputs are not yet available.
+- The optimisation phase is complete; no query outputs are pending.
 - Later samples are concentrated around strong local regions rather than distributed uniformly.
 - The dataset contains no demographic, personal or sensitive attributes.
 
 ## Collection process
 
-The initial arrays were supplied by the course. Subsequent inputs were generated over ten weekly rounds. One query per function was submitted in each round. Returned portal values were recorded without manual alteration.
+The initial arrays were supplied by the course. Subsequent inputs were generated over twelve weekly rounds. One query per function was submitted in each round. Returned portal values were recorded without manual alteration.
 
 The collection strategy evolved as evidence accumulated:
 
@@ -62,6 +62,9 @@ The collection strategy evolved as evidence accumulated:
 4. RBF SVMs classified relatively high- and low-performance regions.
 5. Small neural-network ensembles and input gradients were used as flexible sensitivity checks, especially in higher dimensions.
 6. Later rounds emphasised local response trends, bracketing, interpolation, controlled coordinate changes and transparent decision rules.
+7. Round 11 used output-aware local clusters, medoids, interval tightening and ridge continuation to distinguish coherent trends from noisy neighbours.
+8. Round 12 used repeated displacement vectors as PCA-style empirical directions, retaining movements associated with improvement and reducing redundant or unstable movement.
+9. The final policy used an RL analogy: empirical improvement acted as reward, repeated query directions acted as actions and the finite remaining budget shifted the balance toward exploitation.
 
 Candidate inputs were checked for dimensionality, bounds, six-decimal formatting and duplication. The chronological decision record is maintained in [`outputs/bbo-capstone-living-documentation.md`](../outputs/bbo-capstone-living-documentation.md).
 
